@@ -1,13 +1,15 @@
-export type TodoStatus = "pending" | "done";
-
 export interface Todo {
   id: string;
-  title: string;
-  description?: string;
-  status: TodoStatus;
+  item: string;        // bukan title
   userId: string;
+  isDone: boolean;     // bukan status
   createdAt: string;
   updatedAt: string;
+  user?: {
+    id: string;
+    email: string;
+    fullName: string;
+  };
 }
 
 export interface TodoListResponse {
@@ -17,12 +19,11 @@ export interface TodoListResponse {
 }
 
 export interface CreateTodoPayload {
-  title: string;
-  description?: string;
+  item: string;        // bukan title
 }
 
 export interface TodoFilters {
-  status?: TodoStatus | "";
+  isDone?: boolean | "";
   search?: string;
   page?: number;
   limit?: number;

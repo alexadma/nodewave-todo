@@ -17,35 +17,26 @@ export function TodoCard({ todo }: Props) {
   const { mutate: toggle, isPending: toggling } = useToggleTodo();
   const { mutate: remove, isPending: deleting } = useDeleteTodo();
 
-  const isDone = todo.status === "done";
-
   return (
-    <Card className={clsx("transition-opacity", isDone && "opacity-60")}>
+    <Card className={clsx("transition-opacity", todo.isDone && "opacity-60")}>
       <CardContent className="flex items-start gap-3 p-4">
         <Checkbox
-          checked={isDone}
+          checked={todo.isDone}
           disabled={toggling}
-          onCheckedChange={() =>
-            toggle({ id: todo.id, status: isDone ? "pending" : "done" })
-          }
+          onCheckedChange={() => toggle({ id: todo.id, isDone: !todo.isDone })}
           className="mt-1"
         />
         <div className="flex-1 min-w-0">
-          <p className={clsx("font-medium truncate", isDone && "line-through text-muted-foreground")}>
-            {todo.title}
+          <p className={clsx("font-medium truncate", todo.isDone && "line-through text-muted-foreground")}>
+            {todo.item}
           </p>
-          {todo.description && (
-            <p className="text-sm text-muted-foreground mt-1 line-clamp-2">
-              {todo.description}
-            </p>
-          )}
           <p className="text-xs text-muted-foreground mt-2">
             {format(new Date(todo.createdAt), "dd MMM yyyy", { locale: id })}
           </p>
         </div>
         <div className="flex items-center gap-2 shrink-0">
-          <Badge variant={isDone ? "secondary" : "default"}>
-            {isDone ? "Selesai" : "Pending"}
+          <Badge variant={todo.isDone ? "secondary" : "default"}>
+            {todo.isDone ? "Selesai" : "Pending"}
           </Badge>
           <Button
             size="icon"

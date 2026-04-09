@@ -1,8 +1,7 @@
 import { z } from "zod";
 
 export const createTodoSchema = z.object({
-  title: z.string().min(1, "Judul wajib diisi").max(100),
-  description: z.string().max(500).optional(),
+  item: z.string().min(1, "Todo wajib diisi").max(200),
 });
 
 export type CreateTodoFormValues = z.infer<typeof createTodoSchema>;

@@ -8,13 +8,12 @@ import { createTodoSchema, CreateTodoFormValues } from "@/schemas/todo.schema";
 import { useCreateTodo } from "@/hooks/useTodos";
 import { Button } from "@/components/ui/button";
 import {
-  Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger,
+  Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger, DialogDescription,
 } from "@/components/ui/dialog";
 import {
   Form, FormControl, FormField, FormItem, FormLabel, FormMessage,
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
-import { Textarea } from "@/components/ui/textarea";
 
 export function CreateTodoDialog() {
   const [open, setOpen] = useState(false);
@@ -22,7 +21,7 @@ export function CreateTodoDialog() {
 
   const form = useForm<CreateTodoFormValues>({
     resolver: zodResolver(createTodoSchema),
-    defaultValues: { title: "", description: "" },
+    defaultValues: { item: "" },
   });
 
   const onSubmit = (values: CreateTodoFormValues) => {
@@ -42,33 +41,21 @@ export function CreateTodoDialog() {
       <DialogContent>
         <DialogHeader>
           <DialogTitle>Buat Todo Baru</DialogTitle>
+          <DialogDescription className="sr-only">Form untuk membuat todo baru</DialogDescription>
         </DialogHeader>
         <Form {...form}>
           <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-4">
-            <FormField control={form.control} name="title"
+            <FormField control={form.control} name="item"
               render={({ field }) => (
                 <FormItem>
-                  <FormLabel>Judul</FormLabel>
-                  <FormControl><Input placeholder="Judul todo..." {...field} /></FormControl>
-                  <FormMessage />
-                </FormItem>
-              )}
-            />
-            <FormField control={form.control} name="description"
-              render={({ field }) => (
-                <FormItem>
-                  <FormLabel>Deskripsi (opsional)</FormLabel>
-                  <FormControl>
-                    <Textarea placeholder="Deskripsi..." rows={3} {...field} />
-                  </FormControl>
+                  <FormLabel>Todo</FormLabel>
+                  <FormControl><Input placeholder="Apa yang ingin kamu lakukan?" {...field} /></FormControl>
                   <FormMessage />
                 </FormItem>
               )}
             />
             <div className="flex justify-end gap-2">
-              <Button type="button" variant="outline" onClick={() => setOpen(false)}>
-                Batal
-              </Button>
+              <Button type="button" variant="outline" onClick={() => setOpen(false)}>Batal</Button>
               <Button type="submit" disabled={isPending}>
                 {isPending ? "Menyimpan..." : "Simpan"}
               </Button>

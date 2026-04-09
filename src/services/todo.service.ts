@@ -1,10 +1,5 @@
 import { axiosInstance } from "@/lib/axios";
-import {
-  Todo,
-  TodoListResponse,
-  CreateTodoPayload,
-  TodoFilters,
-} from "@/types/todo.types";
+import { Todo, TodoListResponse, CreateTodoPayload, TodoFilters } from "@/types/todo.types";
 
 export const todoService = {
   getAll: async (filters: TodoFilters = {}): Promise<TodoListResponse> => {
@@ -17,8 +12,8 @@ export const todoService = {
     return data.content;
   },
 
-  toggleStatus: async (id: string, status: "done" | "pending"): Promise<Todo> => {
-    const { data } = await axiosInstance.patch(`/todos/${id}`, { status });
+  toggleStatus: async (id: string, isDone: boolean): Promise<Todo> => {
+    const { data } = await axiosInstance.patch(`/todos/${id}`, { isDone });
     return data.content;
   },
 

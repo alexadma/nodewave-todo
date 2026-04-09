@@ -21,16 +21,20 @@ export function TodoFilters({ filters, onChange }: Props) {
         className="sm:max-w-xs"
       />
       <Select
-        value={filters.status ?? ""}
+        value={filters.isDone === true ? "done" : filters.isDone === false ? "pending" : "all"}
         onValueChange={(v) =>
-          onChange({ ...filters, status: v as Filters["status"], page: 1 })
+          onChange({
+            ...filters,
+            isDone: v === "all" ? "" : v === "done" ? true : false,
+            page: 1,
+          })
         }
       >
         <SelectTrigger className="sm:w-40">
           <SelectValue placeholder="Semua Status" />
         </SelectTrigger>
         <SelectContent>
-          <SelectItem value="">Semua</SelectItem>
+          <SelectItem value="all">Semua</SelectItem>
           <SelectItem value="pending">Pending</SelectItem>
           <SelectItem value="done">Selesai</SelectItem>
         </SelectContent>

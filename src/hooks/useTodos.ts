@@ -29,8 +29,8 @@ export const useCreateTodo = () => {
 export const useToggleTodo = () => {
   const qc = useQueryClient();
   return useMutation({
-    mutationFn: ({ id, status }: { id: string; status: "done" | "pending" }) =>
-      todoService.toggleStatus(id, status),
+    mutationFn: ({ id, isDone }: { id: string; isDone: boolean }) =>
+      todoService.toggleStatus(id, isDone),
     onSuccess: () => qc.invalidateQueries({ queryKey: TODO_KEYS.all }),
     onError: () => toast.error("Gagal mengubah status"),
   });
