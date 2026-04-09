@@ -11,13 +11,9 @@ export interface Todo {
 }
 
 export interface TodoListResponse {
-  data: Todo[];
-  meta: {
-    total: number;
-    page: number;
-    limit: number;
-    totalPages: number;
-  };
+  entries: Todo[];
+  totalData: number;
+  totalPage: number;
 }
 
 export interface CreateTodoPayload {

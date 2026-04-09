@@ -1,8 +1,8 @@
 export interface User {
   id: string;
-  name: string;
+  fullName: string;   // ← API pakai fullName bukan name
   email: string;
-  role: "user" | "admin";
+  role: "USER" | "ADMIN";  // ← API pakai uppercase
 }
 
 export interface AuthResponse {
@@ -16,7 +16,7 @@ export interface LoginPayload {
 }
 
 export interface RegisterPayload {
-  name: string;
+  fullName: string;   // ← sesuaikan dengan API
   email: string;
   password: string;
 }

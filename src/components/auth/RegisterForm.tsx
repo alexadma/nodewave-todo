@@ -15,16 +15,16 @@ export function RegisterForm() {
 
   const form = useForm<RegisterFormValues>({
     resolver: zodResolver(registerSchema),
-    defaultValues: { name: "", email: "", password: "", confirmPassword: "" },
+    defaultValues: { fullName: "", email: "", password: "", confirmPassword: "" },
   });
 
   return (
     <Form {...form}>
       <form onSubmit={form.handleSubmit((v) => register(v))} className="space-y-4">
-        <FormField control={form.control} name="name"
+        <FormField control={form.control} name="fullName"
           render={({ field }) => (
             <FormItem>
-              <FormLabel>Nama</FormLabel>
+              <FormLabel>Nama Lengkap</FormLabel>
               <FormControl><Input placeholder="Nama lengkap" {...field} /></FormControl>
               <FormMessage />
             </FormItem>

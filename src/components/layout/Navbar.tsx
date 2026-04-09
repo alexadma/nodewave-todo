@@ -16,12 +16,12 @@ export function Navbar() {
           NodeWave Todo
         </Link>
         <div className="flex items-center gap-4">
-          {user?.role === "admin" && (
+          {user?.role === "ADMIN" && (
             <Link href="/admin">
               <Button variant="ghost" size="sm">Admin</Button>
             </Link>
           )}
-          <span className="text-sm text-muted-foreground">{user?.name}</span>
+          <span className="text-sm text-muted-foreground">{user?.fullName}</span>
           <Button variant="outline" size="sm" onClick={logout}>
             Logout
           </Button>

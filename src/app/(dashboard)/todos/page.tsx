@@ -28,18 +28,17 @@ export default function TodosPage() {
             <Skeleton key={i} className="h-20 w-full rounded-lg" />
           ))}
         </div>
-      ) : data?.data.length === 0 ? (
+      ) : data?.entries.length === 0 ? (
         <p className="text-center text-muted-foreground py-16">
           Belum ada todo. Mulai tambahkan!
         </p>
       ) : (
         <div className="space-y-3">
-          {data?.data.map((todo) => <TodoCard key={todo.id} todo={todo} />)}
+          {data?.entries.map((todo) => <TodoCard key={todo.id} todo={todo} />)}
         </div>
       )}
 
-      {/* Pagination */}
-      {data && data.meta.totalPages > 1 && (
+      {data && data.totalPage > 1 && (
         <div className="flex justify-center gap-2">
           <Button
             variant="outline"
@@ -50,12 +49,12 @@ export default function TodosPage() {
             Sebelumnya
           </Button>
           <span className="flex items-center text-sm text-muted-foreground">
-            Halaman {filters.page} / {data.meta.totalPages}
+            Halaman {filters.page} / {data.totalPage}
           </span>
           <Button
             variant="outline"
             size="sm"
-            disabled={filters.page === data.meta.totalPages}
+            disabled={filters.page === data.totalPage}
             onClick={() => setFilters((f) => ({ ...f, page: (f.page ?? 1) + 1 }))}
           >
             Berikutnya

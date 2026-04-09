@@ -9,26 +9,25 @@ import {
 export const todoService = {
   getAll: async (filters: TodoFilters = {}): Promise<TodoListResponse> => {
     const { data } = await axiosInstance.get("/todos", { params: filters });
-    return data;
+    return data.content;
   },
 
   create: async (payload: CreateTodoPayload): Promise<Todo> => {
     const { data } = await axiosInstance.post("/todos", payload);
-    return data;
+    return data.content;
   },
 
   toggleStatus: async (id: string, status: "done" | "pending"): Promise<Todo> => {
     const { data } = await axiosInstance.patch(`/todos/${id}`, { status });
-    return data;
+    return data.content;
   },
 
   delete: async (id: string): Promise<void> => {
     await axiosInstance.delete(`/todos/${id}`);
   },
 
-  // Admin
   getAllAdmin: async (filters: TodoFilters = {}): Promise<TodoListResponse> => {
     const { data } = await axiosInstance.get("/admin/todos", { params: filters });
-    return data;
+    return data.content;
   },
 };

@@ -19,10 +19,10 @@ export default function AdminPage() {
   const { data, isLoading } = useTodos(filters);
 
   useEffect(() => {
-    if (!user || user.role !== "admin") router.push("/todos");
+    if (!user || user.role !== "ADMIN") router.push("/todos");
   }, [user, router]);
 
-  if (!user || user.role !== "admin") return null;
+  if (!user || user.role !== "ADMIN") return null;
 
   return (
     <div className="max-w-4xl mx-auto p-6 space-y-6">
@@ -48,7 +48,7 @@ export default function AdminPage() {
               </tr>
             </thead>
             <tbody>
-              {data?.data.map((todo) => (
+              {data?.entries.map((todo) => (
                 <tr key={todo.id} className="border-t hover:bg-muted/50">
                   <td className="p-3">{todo.title}</td>
                   <td className="p-3 text-muted-foreground">{todo.userId}</td>
