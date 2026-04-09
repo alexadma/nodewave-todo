@@ -4,7 +4,7 @@ import { AuthResponse, LoginPayload, RegisterPayload } from "@/types/auth.types"
 export const authService = {
   login: async (payload: LoginPayload): Promise<AuthResponse> => {
     const { data } = await axiosInstance.post("/login", payload);
-    return data.content; // ← API wrap response di dalam "content"
+    return data.content;
   },
 
   register: async (payload: RegisterPayload): Promise<AuthResponse> => {
