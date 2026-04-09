@@ -1,36 +1,184 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# NodeWave Todo App — Frontend Assessment
 
-## Getting Started
+Aplikasi Todo berbasis Next.js yang dibangun sebagai bagian dari proses rekrutmen Frontend Engineer NodeWave.
 
-First, run the development server:
+## 🔗 Links
 
-```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
+- **Live Demo**: [https://nodewave-todo.vercel.app](https://nodewave-todo.vercel.app)
+- **API Base URL**: https://fe-test-api.nwappservice.com
+
+---
+
+## ✅ Fitur yang Diimplementasikan
+
+### Mandatory
+| Fitur | Status |
+|---|---|
+| Login | ✅ |
+| Register | ✅ |
+| Buat Todo baru | ✅ |
+| Tandai Todo selesai / belum | ✅ |
+| Hapus Todo | ✅ |
+| Tampilkan semua Todo | ✅ |
+| Filter Todo (status, pencarian) | ✅ |
+| Pagination | ✅ |
+
+### Optional
+| Fitur | Status |
+|---|---|
+| Admin Page (lihat semua todo + filter) | ✅ |
+
+---
+
+## 🛠️ Tech Stack
+
+| Kategori | Teknologi |
+|---|---|
+| Framework | Next.js 14 (App Router) |
+| Bahasa | TypeScript |
+| CSS | Tailwind CSS |
+| UI Kit | Shadcn UI |
+| Server State | React Query (TanStack Query) |
+| Client State | Zustand |
+| HTTP Client | Axios |
+| Validasi | Zod + React Hook Form |
+| Utility | clsx, date-fns |
+| Notifikasi | Sonner |
+| Deployment | Vercel |
+
+---
+
+## 📁 Struktur Proyek
+
+```
+src/
+├── app/                   # Next.js App Router
+│   ├── (auth)/            # Halaman publik: login & register
+│   ├── (dashboard)/       # Halaman terproteksi: todos
+│   └── admin/             # Admin page (optional)
+├── components/
+│   ├── ui/                # Shadcn auto-generated components
+│   ├── auth/              # Form Login & Register
+│   ├── todos/             # TodoCard, TodoList, Filter, Dialog
+│   └── layout/            # Navbar, ProtectedRoute
+├── hooks/                 # Custom hooks (useAuth, useTodos)
+├── lib/                   # Konfigurasi axios, react-query
+├── schemas/               # Zod validation schemas
+├── services/              # API service layer
+├── store/                 # Zustand auth store
+└── types/                 # TypeScript interfaces
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+---
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+## 🚀 Setup & Menjalankan Secara Lokal
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+### Prasyarat
+- Node.js >= 18
+- npm atau pnpm
 
-## Learn More
+### Langkah-langkah
 
-To learn more about Next.js, take a look at the following resources:
+```bash
+# 1. Clone repository
+git clone https://github.com/USERNAME/nodewave-todo.git
+cd nodewave-todo
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+# 2. Install dependencies
+npm install
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+# 3. Setup environment
+cp .env.example .env.local
+# Edit .env.local sesuai kebutuhan
 
-## Deploy on Vercel
+# 4. Jalankan development server
+npm run dev
+```
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+Buka [http://localhost:3000](http://localhost:3000) di browser.
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+---
+
+## 🔑 Environment Variables
+
+Buat file `.env.local` di root project:
+
+```env
+NEXT_PUBLIC_API_BASE_URL=https://fe-test-api.nwappservice.com
+```
+
+---
+
+## 🏗️ Arsitektur & Keputusan Teknis
+
+### 1. State Management
+- **Zustand** digunakan untuk menyimpan state autentikasi (`user`, `token`) yang di-persist ke `localStorage`.
+- **React Query** mengelola semua server state (data dari API): caching, refetching, dan invalidasi otomatis setelah mutasi.
+
+### 2. Validasi Form
+- Semua form menggunakan **Zod schema** yang dikombinasikan dengan **React Hook Form** via `@hookform/resolvers/zod`.
+- Ini memastikan validasi terpusat, konsisten, dan type-safe.
+
+### 3. HTTP Layer
+- **Axios instance** terpusat dengan interceptor untuk:
+  - Menyertakan `Authorization: Bearer <token>` di setiap request.
+  - Redirect ke `/login` otomatis jika respons `401 Unauthorized`.
+
+### 4. Protected Routes
+- Komponen `ProtectedRoute` mengecek status autentikasi dari Zustand store.
+- Jika belum login, pengguna diarahkan ke halaman `/login`.
+
+### 5. Component Design
+- Komponen dipecah berdasarkan tanggung jawab (single responsibility).
+- Business logic (API calls, state updates) dienkapsulasi di custom hooks, bukan di komponen UI.
+
+---
+
+## 📖 Panduan Penggunaan
+
+### Register & Login
+1. Buka halaman `/register` dan isi form.
+2. Setelah registrasi berhasil, akan otomatis masuk ke halaman todos.
+3. Untuk login kembali, gunakan halaman `/login`.
+
+### Mengelola Todo
+- **Tambah**: Klik tombol **"Tambah Todo"** → isi judul & deskripsi → simpan.
+- **Selesaikan**: Klik checkbox di sebelah kiri todo.
+- **Hapus**: Klik ikon 🗑️ di sebelah kanan todo.
+- **Filter**: Gunakan input pencarian atau dropdown status di atas daftar.
+
+### Admin Page (jika diimplementasi)
+- Login dengan akun admin:
+  - Email: `admin@nodewave.id`
+  - Password: `admin123`
+- Akses halaman `/admin` untuk melihat semua todo dari semua pengguna.
+
+---
+
+## 📦 Scripts
+
+```bash
+npm run dev      # Jalankan development server
+npm run build    # Build untuk production
+npm run start    # Jalankan production build
+npm run lint     # Cek linting
+```
+
+---
+
+## 🚢 Deployment
+
+Aplikasi di-deploy ke **Vercel** secara otomatis dari branch `main`.
+
+Langkah manual:
+```bash
+npx vercel --prod
+```
+
+Pastikan environment variable `NEXT_PUBLIC_API_BASE_URL` sudah diatur di Vercel dashboard.
+
+---
+
+## 👤 Tentang
+
+Dikerjakan sebagai bagian dari **NodeWave Frontend Engineer Assessment**.
