@@ -1,8 +1,7 @@
 import axios from "axios";
 import { useAuthStore } from "@/store/authStore";
 
-const BASE_URL = process.env.NEXT_PUBLIC_API_BASE_URL ||
-  "https://fe-test-api.nwappservice.com";
+const BASE_URL = process.env.NEXT_PUBLIC_API_BASE_URL || "";
 
 export const axiosInstance = axios.create({
   baseURL: BASE_URL,
