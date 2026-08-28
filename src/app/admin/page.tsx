@@ -69,7 +69,7 @@ export default function AdminPage() {
             </thead>
 
             <tbody>
-              {data.entries.map((todo) => (
+              {data?.entries.map((todo) => (
                 <tr
                   key={todo.id}
                   className="border-t hover:bg-muted/50 transition"
