@@ -27,4 +27,5 @@ export interface TodoFilters {
   search?: string;
   page?: number;
   limit?: number;
+  date?: string; // ISO date string e.g. "2026-08-28"
 }

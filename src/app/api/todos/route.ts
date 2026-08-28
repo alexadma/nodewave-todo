@@ -12,6 +12,7 @@ export async function GET(req: NextRequest) {
   const { searchParams } = new URL(req.url);
   const isDoneParam = searchParams.get("isDone");
   const search = searchParams.get("search") || "";
+  const date = searchParams.get("date"); // "YYYY-MM-DD"
   const page = parseInt(searchParams.get("page") || "1", 10);
   const limit = parseInt(searchParams.get("limit") || "10", 10);
   const all = searchParams.get("all") === "true" && user.role === "ADMIN";
@@ -30,6 +31,13 @@ export async function GET(req: NextRequest) {
   // Search in item
   if (search) {
     where.item = { contains: search, mode: "insensitive" };
+  }
+
+  // Filter by date (start of day to end of day)
+  if (date) {
+    const start = new Date(date + "T00:00:00.000Z");
+    const end = new Date(date + "T23:59:59.999Z");
+    where.createdAt = { gte: start, lte: end };
   }
 
   const [entries, totalData] = await Promise.all([

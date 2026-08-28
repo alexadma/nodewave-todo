@@ -1,6 +1,15 @@
 import { axiosInstance } from "@/lib/axios";
 import { TodoFilters, TodoListResponse, Todo, CreateTodoPayload } from "@/types/todo.types";
 
+export interface TodoDateInfo {
+  total: number;
+  done: number;
+}
+
+export interface TodoDatesResponse {
+  dates: Record<string, TodoDateInfo>;
+}
+
 export const todoService = {
   // ✅ GET TODOS
   getAll: async (filters: TodoFilters = {}): Promise<TodoListResponse> => {
@@ -57,5 +66,13 @@ export const todoService = {
         isDone: t.is_done,
       })),
     };
+  },
+
+  // ✅ GET DATES (for calendar dots)
+  getDates: async (month: string, all = false): Promise<TodoDatesResponse> => {
+    const { data } = await axiosInstance.get("/todos/dates", {
+      params: { month, all },
+    });
+    return data;
   },
 };

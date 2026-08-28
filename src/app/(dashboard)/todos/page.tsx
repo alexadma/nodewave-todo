@@ -7,11 +7,14 @@ import { todoService } from "@/services/todo.service";
 import { TodoCard } from "@/components/todos/TodoCard";
 import { TodoFilters } from "@/components/todos/TodoFilters";
 import { CreateTodoDialog } from "@/components/todos/CreateTodoDialog";
+import { Calendar } from "@/components/todos/Calendar";
 import { Skeleton } from "@/components/ui/skeleton";
 import { Button } from "@/components/ui/button";
 import { TodoFilters as TF } from "@/types/todo.types";
-import { Plus, ClipboardList } from "lucide-react";
+import { Plus, ClipboardList, X } from "lucide-react";
 import { Todo } from "@/types/todo.types";
+import { format } from "date-fns";
+import { id } from "date-fns/locale";
 
 function getGreeting() {
   const h = new Date().getHours();
@@ -22,15 +25,22 @@ function getGreeting() {
 
 export default function TodosPage() {
   const [filters, setFilters] = useState<TF>({ page: 1, limit: 10 });
+  const [selectedDate, setSelectedDate] = useState<Date | null>(null);
   const user = useAuthStore((s) => s.user);
   const isAdmin = user?.role === "ADMIN";
   const firstName = user?.fullName?.split(" ")[0] ?? "there";
 
+  // Merge date filter into filters
+  const effectiveFilters = {
+    ...filters,
+    date: selectedDate ? format(selectedDate, "yyyy-MM-dd") : undefined,
+  };
+
   const { data, isLoading } = useQuery({
-    queryKey: ["todos", filters, isAdmin],
+    queryKey: ["todos", effectiveFilters, isAdmin],
     queryFn: () => isAdmin
-      ? todoService.getAllAdmin(filters)
-      : todoService.getAll(filters),
+      ? todoService.getAllAdmin(effectiveFilters)
+      : todoService.getAll(effectiveFilters),
   });
 
   const doneCount = data?.entries.filter((t: Todo) => t.isDone).length ?? 0;
@@ -53,6 +63,9 @@ export default function TodosPage() {
         </p>
       </div>
 
+      {/* Calendar */}
+      <Calendar selectedDate={selectedDate} onSelect={setSelectedDate} />
+
       {/* Progress bar */}
       {!isAdmin && totalCount > 0 && (
         <div className="space-y-1.5">
@@ -66,6 +79,21 @@ export default function TodosPage() {
               style={{ width: `${progressPct}%` }}
             />
           </div>
+        </div>
+      )}
+
+      {/* Active date filter indicator */}
+      {selectedDate && (
+        <div className="flex items-center gap-2 text-xs text-indigo-600 bg-indigo-50 rounded-lg px-3 py-2">
+          <span className="font-medium">
+            Filter: {format(selectedDate, "d MMMM yyyy", { locale: id })}
+          </span>
+          <button
+            onClick={() => setSelectedDate(null)}
+            className="ml-auto p-0.5 rounded hover:bg-indigo-100 transition"
+          >
+            <X className="w-3.5 h-3.5" />
+          </button>
         </div>
       )}
 
@@ -88,7 +116,11 @@ export default function TodosPage() {
         <div className="flex flex-col items-center justify-center py-20 text-center">
           <ClipboardList className="w-10 h-10 text-gray-200 mb-3" />
           <p className="text-gray-500 font-medium">No tasks yet</p>
-          <p className="text-sm text-gray-400 mt-1">Start by adding your first task</p>
+          <p className="text-sm text-gray-400 mt-1">
+            {selectedDate
+              ? "Tidak ada task pada tanggal ini"
+              : "Start by adding your first task"}
+          </p>
         </div>
       ) : (
         <div className="space-y-2">
