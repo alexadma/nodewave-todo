@@ -36,7 +36,13 @@ export function CreateTodoDialog() {
   return (
     <Dialog open={open} onOpenChange={setOpen}>
       <DialogTrigger asChild>
-        <Button><Plus className="mr-2 h-4 w-4" /> Tambah Todo</Button>
+        <Button
+          size="sm"
+          className="bg-indigo-500 hover:bg-indigo-600 text-white text-sm gap-1.5 shadow-sm"
+        >
+          <Plus className="w-3.5 h-3.5" />
+          Add task
+        </Button>
       </DialogTrigger>
       <DialogContent>
         <DialogHeader>

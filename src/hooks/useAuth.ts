@@ -4,6 +4,7 @@ import { toast } from "sonner";
 import { authService } from "@/services/auth.service";
 import { useAuthStore } from "@/store/authStore";
 import { LoginPayload, RegisterPayload } from "@/types/auth.types";
+import { RegisterFormValues } from "@/schemas/auth.schema";
 
 export const useLogin = () => {
   const router = useRouter();
@@ -16,7 +17,10 @@ export const useLogin = () => {
       toast.success("Login berhasil!");
       router.push("/todos");
     },
-    onError: () => toast.error("Email atau password salah"),
+    onError: (error: any) => {
+      console.error("Login error:", error?.response?.data || error.message);
+      toast.error(error?.response?.data?.message || "Email atau password salah");
+    },
   });
 };
 
@@ -25,13 +29,17 @@ export const useRegister = () => {
   const setAuth = useAuthStore((s) => s.setAuth);
 
   return useMutation({
-    mutationFn: (payload: RegisterPayload) => authService.register(payload),
+    mutationFn: ({ confirmPassword, ...payload }: RegisterFormValues) =>
+      authService.register(payload as RegisterPayload),
     onSuccess: ({ token, user }) => {
       setAuth(user, token);
       toast.success("Registrasi berhasil!");
       router.push("/todos");
     },
-    onError: () => toast.error("Registrasi gagal, coba lagi"),
+    onError: (error: any) => {
+      console.error("Register error:", error?.response?.data || error.message);
+      toast.error(error?.response?.data?.message || "Registrasi gagal, coba lagi");
+    },
   });
 };
 
